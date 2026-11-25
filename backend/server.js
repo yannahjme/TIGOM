@@ -4,6 +4,8 @@ require('dotenv').config();
 const db = require('./db');
 const authRoutes = require('./routes/auth');
 const expensesRoutes = require('./routes/expenses');
+const accountsRoutes = require('./routes/accounts');
+const dashboardRoutes = require('./routes/dashboard');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -25,6 +27,8 @@ app.get('/api/health', async (req, res) => {
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/expenses', expensesRoutes);
+app.use('/api/accounts', accountsRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 app.listen(PORT, () => {
   console.log(`TIGOM backend running on http://localhost:${PORT}`);
