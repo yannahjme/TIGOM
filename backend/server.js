@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const db = require('./db');
+const authRoutes = require('./routes/auth');
+const expensesRoutes = require('./routes/expenses');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -19,6 +21,10 @@ app.get('/api/health', async (req, res) => {
     res.status(500).json({ status: 'error', message: err.message });
   }
 });
+
+// API Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/expenses', expensesRoutes);
 
 app.listen(PORT, () => {
   console.log(`TIGOM backend running on http://localhost:${PORT}`);
