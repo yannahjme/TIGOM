@@ -1,19 +1,25 @@
-require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
+require('dotenv').config();
+const db = require('./db');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static('uploads'));
 
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', project: 'TIGOM' });
+app.get('/api/health', async (req, res) => {
+  try {
+    const [rows] = await db.query('SELECT 1 + 1 AS solution');
+    res.json({ status: 'ok', db_connected: true, result: rows[0].solution });
+  } catch (err) {
+    console.error('Database connection failed:', err);
+    res.status(500).json({ status: 'error', message: err.message });
+  }
 });
 
 app.listen(PORT, () => {
-  console.log(`TIGOM API running on http://localhost:${PORT}`);
+  console.log(`TIGOM backend running on http://localhost:${PORT}`);
 });
